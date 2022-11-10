@@ -31,6 +31,29 @@ async function run(){
             const services = await cursor.toArray();
             res.send(services);
         });
+        app.post("/allservices", async (req, res) => {
+            try {
+              const result = await Product.insertOne(req.body);
+          
+              if (result.insertedId) {
+                res.send({
+                  success: true,
+                  message: `Successfully created the ${req.body.name} with id ${result.insertedId}`,
+                });
+              } else {
+                res.send({
+                  success: false,
+                  error: "Couldn't create the product",
+                });
+              }
+            } catch (error) {
+              console.log(error.name.bgRed, error.message.bold);
+              res.send({
+                success: false,
+                error: error.message,
+              });
+            }
+          });
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
